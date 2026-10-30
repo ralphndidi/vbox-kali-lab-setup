@@ -1,66 +1,68 @@
-# 🛡️ Cybersecurity Home Lab: VirtualBox & Kali Linux Setup
+# Cybersecurity Testing Lab Setup: Kali Linux on VirtualBox
 
-## 📖 Project Overview
-This repository documents the setup of a secure, isolated cybersecurity lab environment designed for penetration testing and ethical hacking practice. The lab uses Oracle VirtualBox to host Kali Linux as an attacking machine, isolated on a custom NAT Network. 
+![Platform](https://img.shields.io/badge/Platform-VirtualBox-blue)
+![OS](https://img.shields.io/badge/Kali-Linux-557C94)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
 
-This project was completed as **Week 1 - Project Module 1** of my Cybersecurity Internship.
+An isolated virtual penetration-testing lab built with Oracle VirtualBox
+and Kali Linux on a custom NAT Network with a static IP.
 
-## 🎯 Objectives & Requirements
-*   **Hypervisor:** Oracle VirtualBox
-*   **Attacking Machine:** Kali Linux
-*   **Network Subnet:** `10.0.0.0/24` (NAT Network)
-*   **Static IP:** `10.0.0.2/24` (with full internet access)
-*   **Integration:** Bidirectional clipboard, drag-and-drop, and shared `/downloads` folder
-*   **Recovery:** Baseline VM Snapshot created
+## Objectives
+- Build an isolated lab network separate from existing VMs
+- Deploy Kali Linux with a static IP (10.0.0.2/24)
+- Enable internet access, shared folders, clipboard and drag-and-drop
+- Create a baseline snapshot for recovery
 
-## 🏗️ Architecture & Configuration
-*   **Host OS:** Windows 10/11
-*   **Virtual Network:** Custom NAT Network (`10.0.0.0/24`)
-*   **Gateway:** `10.0.0.1` (VirtualBox NAT Engine)
-*   **Kali IP:** `10.0.0.2/24`
-*   **DNS:** `8.8.8.8` and `1.1.1.1`
+## Architecture
+| Component | Value |
+|---|---|
+| Hypervisor | Oracle VirtualBox 7.x (Host: Windows 10) |
+| Guest OS | Kali Linux <version> |
+| Network | NAT Network `NatNetwork` |
+| Subnet | 10.0.0.0/24 |
+| Gateway | 10.0.0.1 |
+| Kali IP | 10.0.0.2/24 (static) |
 
-## 🛠️ Key Technical Steps
+Existing VMs (Metasploitable2, etc.) remain on the separate
+`LABNETWORK` (10.0.2.0/24) and were not affected.
 
-### 1. VirtualBox NAT Network Creation
-Created a dedicated NAT Network in VirtualBox with the IPv4 prefix `10.0.0.0/24` to isolate the lab traffic from the host machine.
+## Setup Steps
+1. **Create the NAT Network** (File → Tools → Network Manager)
+   ![NAT](screenshots/01-nat-network-config.png)
+2. **Attach Kali's Adapter 1** to the NAT Network
+   ![Adapter](screenshots/02-kali-vm-network-adapter.png)
+3. **Configure the static IP** (see [script](scripts/configure-static-ip.sh))
+4. **Set up the shared folder** with Auto-mount
+5. **Take a baseline snapshot**
 
-### 2. Kali Linux VM Configuration
-Attached Kali Linux to the new NAT Network. Configured shared folders to mount the host's `Downloads` directory and enabled bidirectional clipboard/drag-and-drop for seamless file transfer.
+## Verification
+| Test | Command | Result |
+|---|---|---|
+| Interface | `ip a` | eth0 UP, 10.0.0.2/24 |
+| Gateway | `ping -c 3 10.0.0.1` | 0% loss |
+| Internet | `ping -c 3 8.8.8.8` | 0% loss |
+| DNS | `ping -c 3 google.com` | Resolves |
 
-### 3. Static IP Assignment (CLI)
-Configured a persistent static IP using `nmcli` inside the Kali terminal:
-```bash
-sudo nmcli connection add type ethernet con-name "Kali-Lab" ifname eth0 \
-ipv4.method manual \
-ipv4.addresses 10.0.0.2/24 \
-ipv4.gateway 10.0.0.1 \
-ipv4.dns "8.8.8.8 1.1.1.1"
+(embed screenshots 03–08 here)
 
-# Critical step to bypass VirtualBox NAT address reservation
-sudo nmcli connection modify "Kali-Lab" ipv4.dad-timeout 0
+## Troubleshooting: NetworkManager IP Reservation Timeout
+**Problem:** `nmcli` failed with "IP configuration could not be reserved",
+yet `ip addr add` worked.
+**Likely cause:** Duplicate Address Detection conflicting with
+VirtualBox's NAT engine reservations.
+**Fix:** Disable DAD on the profile: `nmcli connection modify "Kali-Lab" ipv4.dad-timeout 0`
 
-sudo nmcli connection up "Kali-Lab"
-🚧 Challenges & Troubleshooting (The "DAD" Conflict)
-The Issue: Initially, NetworkManager failed to activate the static IP, throwing the error: "IP configuration could not be reserved (no available address, timeout, etc.)".
+## Lessons Learned
+- How VirtualBox NAT Networks differ from NAT and Bridged modes
+- How NetworkManager handles static addressing and DAD
+- Why snapshots matter before security testing
 
-The Diagnosis: After verifying the VirtualBox virtual link was working (via manual ip addr assignment), I discovered that VirtualBox's internal NAT engine reserves the earliest addresses in the subnet (like .2). NetworkManager's Duplicate Address Detection (DAD) was detecting this reservation and refusing to activate the connection.
+## Full Report
+[Week 1 Report (PDF)](docs/Week1_Project_Report.pdf)
 
-The Solution: I bypassed the DAD check by setting ipv4.dad-timeout 0 on the connection profile. This forced NetworkManager to claim the 10.0.0.2 address without conflicting with the VirtualBox NAT routing.
+## Disclaimer
+For educational use in an isolated lab only. Only test systems you own
+or have written permission to test.
 
-✅ Verification
-IP Assignment: ip a confirmed inet 10.0.0.2/24 on eth0.
-
-Internet Access: ping -c 3 8.8.8.8 returned successful replies with 0% packet loss.
-
-📸 Screenshots
-https://images/network-config.png - VirtualBox NAT Network settings
-
-https://images/kali-ip-ping.png - Terminal showing static IP and internet ping
-
-https://images/snapshot.png - VirtualBox snapshot manager
-
-(Note: Replace the image paths above with your actual uploaded image paths once you upload them to the images/ folder in this repository).
-
-🏷️ Skills Demonstrated
-Virtualization • Kali Linux • Network Configuration • VirtualBox • Network Troubleshooting • Linux CLI • TCP/IP
+## Author
+<Your Name> · [LinkedIn](#) · Cybersecurity Internship, Week 1
