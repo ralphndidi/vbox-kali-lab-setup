@@ -28,10 +28,10 @@ Existing VMs (Metasploitable2, etc.) remain on the separate
 
 ## Setup Steps
 1. **Create the NAT Network** (File → Tools → Network Manager)
-   ![NAT](screenshots/01-nat-network-config.png)
+   ![NAT](01-nat-network-config.png)
 2. **Attach Kali's Adapter 1** to the NAT Network
-   ![Adapter](screenshots/02-kali-vm-network-adapter.png)
-3. **Configure the static IP** (see [script](scripts/configure-static-ip.sh))
+   ![Adapter](02-kali-vm-network-adapter.png)
+3. **Configure the static IP** 
 4. **Set up the shared folder** with Auto-mount
 5. **Take a baseline snapshot**
 
