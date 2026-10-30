@@ -62,4 +62,4 @@ For educational use in an isolated lab only. Only test systems you own
 or have written permission to test.
 
 ## Author
-Raphael Ndidi-Uboma · [https://www.linkedin.com/in/raphael-ndidi-uboma](#) · Network Walks 2026 Cybersecurity Internship, Week 1
+Raphael Ndidi-Uboma · [linkedin.com/in/ralphndidi](#) · Network Walks 2026 Cybersecurity Internship, Week 1
