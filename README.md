@@ -17,7 +17,7 @@ To prevent interference with the host machine's local network and to isolate the
 | Component | Configuration |
 | :--- | :--- |
 | **Hypervisor** | Oracle VirtualBox |
-| **Attacker Machine** | Kali Linux |
+| **Attacker Machine** | Kali Linux (version 2026.3) |
 | **Network Type** | NAT Network (Custom) |
 | **Subnet** | `10.0.0.0/24` |
 | **Gateway** | `10.0.0.1` (VirtualBox NAT Engine) |
