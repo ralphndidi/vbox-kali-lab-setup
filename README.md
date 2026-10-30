@@ -6,7 +6,9 @@
 
 
 ## 📌 Project Overview
-**Project:** Week 1 Internship - Project Module 1
+An isolated virtual penetration-testing lab built with Oracle VirtualBox
+and Kali Linux on a custom NAT Network with a static IP.
+
 **Objective:** Design, deploy, and configure a secure, isolated virtual testing lab environment using Oracle VirtualBox and Kali Linux. The lab is designed to simulate a real-world penetration testing environment.
 
 ## 🏗️ Infrastructure & Network Architecture
