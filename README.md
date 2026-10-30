@@ -74,3 +74,29 @@ To force NetworkManager to ignore the virtual reservation, a new connection prof
 sudo nmcli connection add type ethernet con-name "Kali-Lab" ifname eth0 ipv4.method manual ipv4.addresses 10.0.0.2/24 ipv4.gateway 10.0.0.1 ipv4.dns "8.8.8.8 1.1.1.1"
 sudo nmcli connection modify "Kali-Lab" ipv4.dad-timeout 0
 sudo nmcli connection up "Kali-Lab"
+
+
+📸 Appendices (Project Screenshots)
+1. VirtualBox NAT Network Configuration
+https://images/01-nat-network-config.png
+
+2. Kali VM Network Settings
+https://images/02-kali-vm-network-adapter.png
+
+3. NetworkManager Connection Profile
+https://images/03-nmcli-static-config.png
+
+4. Static IP Verification (ip a)
+https://images/04-ip-a-eth0.png
+
+5. Internet Connectivity Verification (ping 8.8.8.8)
+https://images/05-internet-connectivity.png
+
+6. Shared Folders Configuration
+https://images/06-shared-folder-settings.png
+
+7. Terminal Verification of Shared Folder (/media/sf_KaliShare)
+https://images/07-shared-folder-in-kali.png
+
+8. Baseline Snapshot Created
+https://images/08-baseline-snapshot.png
