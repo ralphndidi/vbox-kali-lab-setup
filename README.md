@@ -41,3 +41,26 @@ ipv4.dns "8.8.8.8 1.1.1.1"
 sudo nmcli connection modify "Kali-Lab" ipv4.dad-timeout 0
 
 sudo nmcli connection up "Kali-Lab"
+🚧 Challenges & Troubleshooting (The "DAD" Conflict)
+The Issue: Initially, NetworkManager failed to activate the static IP, throwing the error: "IP configuration could not be reserved (no available address, timeout, etc.)".
+
+The Diagnosis: After verifying the VirtualBox virtual link was working (via manual ip addr assignment), I discovered that VirtualBox's internal NAT engine reserves the earliest addresses in the subnet (like .2). NetworkManager's Duplicate Address Detection (DAD) was detecting this reservation and refusing to activate the connection.
+
+The Solution: I bypassed the DAD check by setting ipv4.dad-timeout 0 on the connection profile. This forced NetworkManager to claim the 10.0.0.2 address without conflicting with the VirtualBox NAT routing.
+
+✅ Verification
+IP Assignment: ip a confirmed inet 10.0.0.2/24 on eth0.
+
+Internet Access: ping -c 3 8.8.8.8 returned successful replies with 0% packet loss.
+
+📸 Screenshots
+https://images/network-config.png - VirtualBox NAT Network settings
+
+https://images/kali-ip-ping.png - Terminal showing static IP and internet ping
+
+https://images/snapshot.png - VirtualBox snapshot manager
+
+(Note: Replace the image paths above with your actual uploaded image paths once you upload them to the images/ folder in this repository).
+
+🏷️ Skills Demonstrated
+Virtualization • Kali Linux • Network Configuration • VirtualBox • Network Troubleshooting • Linux CLI • TCP/IP
